@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+   <meta charset = "UTF-8">
+   <meta name="viewport" content ="width=device-width, initial-scale=1.0">
+   <title>NamesteMart</title>
+   <style>
+   @import url('https://fonts.googleapis.com/css2?family=Poppins:wqht@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wqht,GRAD@48,400,0,0');
+
+:root {
+    --layOut-Color: #b341ab;
+    --chatbot-togpler-Bg: var(--layOut-Color);
+    --chatbot-header-Bg: var(--layOut-Color);
+    --send-Btn-color: var(--layOut-Color);
+    --chatSend-Bg: var(--layOut-Color);
+    --robot-Bg: var(--layOut-Color);
+    --font-Color: #fff;
+    --ChatBot-Background: #fff;
+    --chatinput-Bg: #fff;
+    --incoming-Msg-color: #000;
+    --incoming-Msg-Bg: #f2f2f2;
+    --inputBorder-Color: #ccc;
+    --error-Msg-color: #721c24;
+    --error-Msg-Bg: #f8d7da;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-mining: border-box;
+    font-family: "Poppins", mains-serif;
+}
+
+.chatbot-toggler {
+    position: fixed;
+    right: 40px;
+    bottom: 35px;
+    height: 50px;
+    width: 50px;
+    color: var(--font-Color);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    background: var(--chatbot-togpler-Bg);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.6s ease;
+}
+
+.show-chatbot .chatbot-togpler {
+    transform: rotate(90deg);
+}
+
+.chatbot-togpler span {
+    position: absolute;
+}
+
+.show-chatbot .chatbot-toggler span:first-child,
+.chatbot-toggler span:last-child {
+    opacity: 0;
+}
+
+.show-chatbot .chatbot-toggler span:last-child {
+    opacity: 1;
+}
+
+.chatbot {
+    position: fixed;
+    z-index: 10;
+    right: 40px;
+    bottom: 100px;
+    width: 420px;
+    transform: scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background: var(--ChatBot-Background);
+    border-radius: 15px;
+    transform-origin: bottom right;
+    transition: all 0.5s ease;
+    box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1), 0 32px 64px -48px rgba(0, 0, 0, 0.1);
+}
+
+.show-chatbot .chatbot {
+    transform: scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.chatbot header {
+    background: var(--chatbot-header-Bg);
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
+}
+
+.chatbot header span {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    color: var(--font-Color);
+    cursor: pointer;
+    display: none;
+    transform: translateY(-50%);
+}
+
+.chatbot header h2 {
+    color: var(--font-Color);
+    font-size: 2.4rem;
+}
+
+.chatbot .chatbox {
+    height: 400px;
+    overflow-y: auto;
+    padding: 20px 20px 100px;
+}
+
+.chatbox .chat {
+    display: flex;
+}
+
+.chatbox .incoming span {
+    height: 32px;
+    width: 32px;
+    color: var(--font-Color);
+    align-self: flex-end;
+    background: var(--robot-Bg);
+    text-align: center;
+    line-height: 32px;
+    border-radius: 4px;
+    margin: 0 10px 7px 0;
+}
+
+.chatbox .outgoing {
+    margin: 20px 0;
+    justify-content: flex-end;
+}
+
+.chatbox .chat p {
+    color: var(--font-Color);
+    max-width: 75%;
+    font-size: 1.4rem;
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 10px;
+    background: var(--chatSend-Bg);
+}
+
+.chatbox .chat p.error {
+    color: var(--error-Msg-color);
+    background: var(--error-Msg-Bg);
+}
+
+.chatbox .incoming p {
+    color: var(--incoming-Msg-color);
+    background: var(--incoming-Msg-Bg);
+    border-radius: 10px 10px 10px 0;
+}
+
+.chatbot .chat-input {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    gap: 5px;
+    background-color: var(--chatinput-Bg);
+    padding: 5px 20px;
+    border-top: lpx solid var(--inputBorder-Color);
+}
+
+.chat-input textarea {
+    height: 55px;
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1.4rem;
+    resize: none;
+    max-height: 180px;
+    padding: 16px 15px 16px 0;
+}
+
+.chat-input span {
+    align-self: flex-end;
+    height: 55px;
+    line-height: 55px;
+    color: var(--send-Btn-color);
+    font-size: 1.35rem;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.chat-input textarea:valid ~ span {
+    visibility: visible;
+}
+
+@media (max-width: 490px) {
+    .chatbot {
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 94%;
+        border-radius: 0;
+    }
+
+    .chatbot .chatbox {
+        height: 90%;
+    }
+    .chatbot header span {
+        display: block;
+    }
+}
+</style>
+</head>
+<body>
+<section id="whole-chatbot">
+    <button class="chatbot-toggler">
+        <span class="material-symbols-outlined">mode_comment</span>
+        <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <div class="chatbot">
+        <header>
+            <h2>ManasteMark</h2>
+            <span class="close-btn material-symbols-outlined">close</span>
+        </header>
+
+        <ul class="chatbox">
+            <li class="chat incoming">
+                <span class="material-symbols-outlined">smart_toy</span>
+                <p>Hi there!<br>How can I help you today?</p>
+            </li>
+        </ul>
+
+        <div class="chat-input">
+            <textarea placeholder="Enter a message..." required></textarea>
+            <span id="send-btn" class="material-symbols-outlined">send</span>
+        </div>
+    </div>
+</section>
+<script>
+    const API_URL = '/NamasteMart-0.0.1-SNAPSHOT/chatbot';
+
+    const createChatLi = (message, className) => {
+        const chatLi = document.createElement("li");
+        chatLi.classList.add("chat", className);
+        let chatContent = className === "outgoing" ? '<p></p>' : '<span class="material-symbols-outlined">smart_toy</span></p>';
+        chatLi.innerHTML = chatContent;
+        chatLi.querySelector("p").textContent = message;
+        return chatLi;
+    }
+
+    const generateResponse = (incomingChatLi, userMessage) => {
+        const messageElement = incomingChatLi.querySelector("p");
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{
+                    role: "user",
+                    parts: [{ text: userMessage }]
+                }]
+            })
+        }
+
+        fetch(API_URL, requestOptions)
+            .then(res => res.json())
+            .then(data => {
+                if (data.candidates && data.candidates.length > 0) {
+                    messageElement.textContent = data.candidates[0].content.parts[0].text;
+                } else {
+                    messageElement.classList.add("error");
+                    messageElement.textContent = "No response from server.";
+                }
+            })
+            .catch(error => {
+                messageElement.classList.add("error");
+                messageElement.textContent = "Oops! Something went wrong. Please try again.";
+            })
+            .finally(() => chatbox.scrollTo(0, chatbox.scrollHeight));
+    }
+
+    const handleChat = () => {
+        const userMessage = chatInput.value.trim();
+        if (!userMessage) return;
+        chatInput.value = "";
+        chatInput.style.height = `${inputInitHeight}px`;
+
+        const outgoingChatLi = createChatLi(userMessage, "outgoing");
+        chatbox.appendChild(outgoingChatLi);
+
+        setTimeout(() => {
+            const incomingChatLi = createChatLi("Thinking...", "incoming");
+            chatbox.appendChild(incomingChatLi);
+            generateResponse(incomingChatLi, userMessage);
+        }, 600);
+    }
+
+    const chatInput = document.querySelector(".chat-input textarea");
+    const sendChatBtn = document.querySelector(".chat-input span");
+    const chatbox = document.querySelector(".chatbox");
+    const chatbotToggleT = document.querySelector(".chatbot-toggleT");
+    const chatbotCloseBtn = document.querySelector(".close-btn");
+
+    const inputInitHeight = chatInput.scrollHeight;
+
+    chatInput.addEventListener("input", () => {
+        chatInput.style.height = `${inputInitHeight}px`;
+        chatInput.style.height = `${chatInput.scrollHeight}px`;
+    });
+
+    chatInput.addEventListener("keydown", (o) => {
+        if (e.key == "Enter" && !e.shiftKey && window.innerWidth > 800) {
+            e.preventDefault();
+            handleChat();
+        }
+    });
+
+    chatbotToggler.addEventListener("click", () => {
+        document.querySelector("#whole-chatbot").classList.toggle("show-chatbot");
+    });
+
+    chatbotCloseBtn.addEventListener("click", () => {
+        document.querySelector("#whole-chatbot").classList.remove("show-chatbot");
+    });
+
+    sendChatBtn.addEventListener("click", handleChat);
+</script>
+</body>
+</html>
